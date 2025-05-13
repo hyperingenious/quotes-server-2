@@ -19,7 +19,6 @@ import {
   AddSubscriptionQuota,
 } from "./add_appwrite_interfaces";
 import { BookEntryData } from "../../types/types";
-import { Mode } from "fs";
 
 async function add_deletion_entry({
   file_id,
@@ -185,7 +184,10 @@ async function add_subscriptions_entry({
   }
 }
 
-async function add_subscription_quota({ subscription_id, subscription_type }:AddSubscriptionQuota):Promise<Models.Document> {
+async function add_subscription_quota({
+  subscription_id,
+  subscription_type,
+}: AddSubscriptionQuota): Promise<Models.Document> {
   try {
     const document = await databases.createDocument(
       DATABASE_ID,
@@ -205,7 +207,12 @@ async function add_subscription_quota({ subscription_id, subscription_type }:Add
   }
 }
 
-async function add_feedback_entry({ user_id, email, feedback, image_link }: AddFeedBackEntry) : Promise<Models.Document> {
+async function add_feedback_entry({
+  user_id,
+  email,
+  feedback,
+  image_link,
+}: AddFeedBackEntry): Promise<Models.Document> {
   try {
     const doc = await databases.createDocument(
       DATABASE_ID,

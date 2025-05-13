@@ -1,5 +1,3 @@
-import { symlink } from "fs";
-
 interface AddDeletionEntry {
   file_id: string;
   chunk_id_array: string[];
