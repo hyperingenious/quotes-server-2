@@ -1,0 +1,3 @@
+interface VerifyToken{
+    token :string;
+}
