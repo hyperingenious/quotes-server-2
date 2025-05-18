@@ -231,7 +231,7 @@ async function add_feedback_entry({
   }
 }
 
-module.exports = {
+export {
   add_upload_book_entry,
   add_blogs,
   add_blog,
