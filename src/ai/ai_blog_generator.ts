@@ -163,4 +163,4 @@ async function ai_blog_generator({
   }
 }
 
-module.exports = { ai_blog_generator };
+export  { ai_blog_generator };
