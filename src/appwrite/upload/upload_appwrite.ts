@@ -61,7 +61,7 @@ async function upload_pdf(pdf_path:string) {
   }
 }
 
-module.exports = {
+export  {
   upload_pdf_chunk,
   upload_pdf,
   upload_file_with_url,
