@@ -38,7 +38,7 @@ function extractFileId(url: string): string | null {
  * @param {object} req - The request object.
  * @param {object} res - The response object.
  */
-async function deleteContent(req:Request, res:Response) {
+async function deleteContent(req: Request, res: Response) {
   try {
     /**
      * Verifies the user's token using the invalidateToken helper function.
@@ -60,6 +60,7 @@ async function deleteContent(req:Request, res:Response) {
      * Retrieves the book document using the user's ID.
      */
     const { pdf_link } = await get_book_document_by_id({
+      // @ts-ignore
       user_id: verifiedToken.sub,
       bookId,
     });
@@ -83,6 +84,7 @@ async function deleteContent(req:Request, res:Response) {
     const blog_ids = await get_all_blog_ids_match_book_id(bookId);
     console.log(`Fetched ${blog_ids?.length} blog IDs to delete.`);
 
+    // @ts-ignore
     console.log(`Deleting main book entry with ID: ${verifiedToken.sub}`);
     /**
      * Deletes the main book entry from the database.
@@ -113,6 +115,7 @@ async function deleteContent(req:Request, res:Response) {
      * Handles errors that occur during the deletion process. Sends a 500 error response if the response hasn't already been sent.
      */
     if (!res.headersSent) {
+      // @ts-ignore
       res.status(500).json({ error: error.message });
     }
   }
