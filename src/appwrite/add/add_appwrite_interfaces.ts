@@ -1,5 +1,5 @@
 interface AddDeletionEntry {
-  file_id: string;
+  file_id: string | null;
   chunk_id_array: string[];
   blog_id_array: string[];
 }
@@ -40,7 +40,7 @@ interface AddFeedBackEntry {
   user_id: string;
   email: string;
   feedback: string;
-  image_link: string;
+  image_link?: string;
 }
 
 export {
