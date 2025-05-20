@@ -5,10 +5,14 @@ import {
 import { create_payment_link } from "../../razorpay/razorpay";
 import { add_initiate_transaction_entry } from "../../appwrite/add/add_appwrite";
 import { invalidateToken } from "../../helpers/helper";
-import { Request, Response } from "express";
-async function initiateTransaction(req: Request, res: Response) {
+import { NextFunction, Request, Response } from "express";
+async function initiateTransaction(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
-    const verifiedToken = await invalidateToken({ res, req });
+    const verifiedToken = await invalidateToken(req, res, next);
     const subscription_type = req.body.subscription_type;
     //@ts-ignore
     const email = verifiedToken.email; // Get email from verifiedToken
@@ -31,10 +35,11 @@ async function initiateTransaction(req: Request, res: Response) {
       });
       if (hasActiveSubscription) {
         console.log("User has an active subscription.");
-        return res.status(400).json({
+        res.status(400).json({
           error: "Bad request",
           message: "You already have an active subscription",
         });
+        return;
       }
     } else {
       console.log("User has no existing subscriptions.");
@@ -49,11 +54,12 @@ async function initiateTransaction(req: Request, res: Response) {
         // Use for...of loop for better readability
         const today = Math.floor(new Date().getTime() / 1000);
         if (doc.expire_by > today) {
-          return res.status(400).json({
+          res.status(400).json({
             error: "Bad request",
             message:
               "You already has an initiated transactions, please try again later",
           });
+          return;
         }
       }
     } else {
@@ -80,12 +86,13 @@ async function initiateTransaction(req: Request, res: Response) {
     console.log("Initiate transaction entry added successfully.");
 
     console.log("Returning payment link details.");
-    return res.status(200).json({
+    res.status(200).json({
       currency: payment_metadata.currency,
       payment_link: payment_metadata.short_url,
       amount: payment_metadata.amount,
       expire_by: payment_metadata.expire_by,
     });
+    return;
   } catch (error) {
     console.error("Error in /initiate_transaction:", error);
     res.status(500).json({ error: "Internal Server Error" });
