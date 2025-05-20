@@ -11,14 +11,16 @@ async function dataDeletion(req:Request, res:Response) {
 
     if (!token || !deletionData) {
         console.error("Missing required fields: 'token' or 'deletionData'");
-        return res.status(400).json({ error: "Missing required fields: 'token' or 'deletionData'" });
+        res.status(400).json({ error: "Missing required fields: 'token' or 'deletionData'" });
+        return 
     }
 
     try {
         const isTokenValid = await verify_token({ token });
         if (!isTokenValid) {
             console.error("Invalid token provided.");
-            return res.status(400).json({ message: "Invalid token" });
+             res.status(400).json({ message: "Invalid token" });
+            return
         }
 
         switch (deletionData.deletiontype) {
@@ -26,22 +28,26 @@ async function dataDeletion(req:Request, res:Response) {
                 console.log("Deleting book with ID:", deletionData.bookId);
                 await delete_book_entry_by_id_and_token({ token, documentId: deletionData.bookId });
                 console.log("Book deleted successfully.");
-                return res.status(200).json({ message: 'Book deleted successfully' });
+                res.status(200).json({ message: 'Book deleted successfully' });
+                return 
 
             case "delete_blog":
                 console.log("Deleting blog with ID:", deletionData.blogId);
                 await delete_blog_entry_by_id_and_token({ token, documentId: deletionData.blogId });
                 console.log("Blog deleted successfully.");
-                return res.status(200).json({ message: 'Blog deleted successfully' });
+                res.status(200).json({ message: 'Blog deleted successfully' });
+                return 
 
             case "delete_everything":
                 console.log("Deleting all data.");
                 await delete_everything({ token });
                 console.log("All data deleted successfully.");
-                return res.status(200).json({ message: 'All data deleted successfully' });
+                res.status(200).json({ message: 'All data deleted successfully' });
+                return 
             default:
                 console.error(`Unknown deletion type: '${deletionData.deletiontype}'`);
-                return res.status(400).json({ error: `Unknown deletion type: '${deletionData.deletiontype}'` });
+                res.status(400).json({ error: `Unknown deletion type: '${deletionData.deletiontype}'` });
+                return 
         }
     } catch (err) {
         console.error("Error during data deletion:", err);
@@ -54,7 +60,8 @@ async function dataDeletion(req:Request, res:Response) {
         } else {
             details = JSON.stringify(err);
         }
-        return res.status(500).json({ error: errorMessage, details });
+         res.status(500).json({ error: errorMessage, details });
+        return
     }
 }
 
