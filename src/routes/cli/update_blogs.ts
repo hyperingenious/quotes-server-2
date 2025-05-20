@@ -77,18 +77,21 @@ async function DataUpdate(req:Request, res:Response) {
 
     // Validate request body
     if (!token || !updateData) {
-        return res.status(400).json({ error: "Missing required fields: 'token' or 'updateData'" });
+        res.status(400).json({ error: "Missing required fields: 'token' or 'updateData'" });
+        return 
     }
 
     if (!updateData.blogid || !updateData.updateObject) {
-        return res.status(400).json({ error: "Missing 'blogid' or 'updateObject' in 'updateData'" });
+        res.status(400).json({ error: "Missing 'blogid' or 'updateObject' in 'updateData'" });
+        return 
     }
 
     try {
         // Validate token
         const isTokenValid = await verify_token({ token });
         if (!isTokenValid) {
-            return res.status(401).json({ message: "Invalid or expired token" });
+            res.status(401).json({ message: "Invalid or expired token" });
+            return 
         }
 
         // Perform update
@@ -99,9 +102,10 @@ async function DataUpdate(req:Request, res:Response) {
         });
 
         // Send success response
-        return res.status(200).json({
+         res.status(200).json({
             message: `Blog updated successfully.`
         });
+        return;
 
     } catch (err) {
         // Log and send error response
@@ -114,10 +118,12 @@ async function DataUpdate(req:Request, res:Response) {
         } else {
             details = JSON.stringify(err);
         }
-        return res.status(500).json({
+         res.status(500).json({
             error: "An error occurred during data update",
             details
         });
+
+        return
     }
 }
 
