@@ -6,8 +6,7 @@ import {
 } from "../../parser/pdf_to_text";
 
 async function parse({
-  filepath,
-  mimetype,
+  filepath, mimetype,
 }: {
   filepath: string;
   mimetype: string;
