@@ -1,7 +1,7 @@
 import { verifyToken } from "@clerk/backend";
-import { Request, Response } from "express";
+import {NextFunction, Request, Response } from "express";
 
-async function invalidateToken({ req, res }: { req: Request; res: Response }) {
+async function invalidateToken(req: Request, res: Response , next:NextFunction) {
   try {
     /**
      * Retrieves the authorization token from the request headers.
