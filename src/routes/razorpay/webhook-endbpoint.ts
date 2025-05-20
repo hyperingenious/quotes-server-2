@@ -43,7 +43,8 @@ async function razorpayWebhookEndpoint(req: Request, res: Response) {
     // Check if signature is valid and event type is 'payment_link.paid'
     if (!isValid || webhookBody.event !== "payment_link.paid") {
       console.log("Invalid webhook signature or event type.");
-      return res.status(400).json({ error: "Bad Request" });
+       res.status(400).json({ error: "Bad Request" });
+      return
     }
 
     // Extract relevant data from the webhook payload
@@ -65,7 +66,8 @@ async function razorpayWebhookEndpoint(req: Request, res: Response) {
         "Initiated transaction not found for payment link ID:",
         paymentLinkEntity.id
       );
-      return res.status(404).json({ error: "Not Found" });
+      res.status(404).json({ error: "Not Found" });
+      return 
     }
 
     // Calculate subscription start and end dates.  Assumes a 30-day subscription.
@@ -110,7 +112,8 @@ async function razorpayWebhookEndpoint(req: Request, res: Response) {
     return;
   } catch (error) {
     console.error("Error processing Razorpay webhook:", error);
-    return res.status(500).json({ error: "Internal Server Error" }); // Return 500 Internal Server Error on error.
+    res.status(500).json({ error: "Internal Server Error" }); // Return 500 Internal Server Error on error.
+    return 
   }
 }
 
