@@ -10,11 +10,11 @@ import {
 import sdk from "node-appwrite";
 import { Request, Response, NextFunction } from "express";
 
-async function userSubscriptionQuota(
+const userSubscriptionQuota = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<void | Response> {
+): Promise<void> => {
   try {
     // @ts-ignore
     const user_id = req.verifiedToken.sub;
