@@ -8,7 +8,7 @@ import {
 } from "../appwrite";
 import sdk from "node-appwrite";
 import crypto from "crypto";
-import { InputFile } from "node-appwrite/dist/inputFile";
+import { InputFile } from "node-appwrite";
 
 async function upload_file_with_url(url: string): Promise<string> {
   console.log(`Uploading file from URL: ${url}`);
