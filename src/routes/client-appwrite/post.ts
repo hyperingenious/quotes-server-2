@@ -1,16 +1,28 @@
-import {config} from "dotenv"
+import { config } from "dotenv";
 config();
 import sdk from "node-appwrite";
-import { databases, DATABASE_ID, BLOGS_COLLECTION_ID, PUBLICLY_SHARED_BLOGS_COLLECTION_ID, TOKENISATION_COLLECTION_ID, CATEGORY_COLLECTION_ID, BOOKS_COLLECTION_ID, } from "../../appwrite/appwrite";
+import {
+  databases,
+  DATABASE_ID,
+  BLOGS_COLLECTION_ID,
+  PUBLICLY_SHARED_BLOGS_COLLECTION_ID,
+  TOKENISATION_COLLECTION_ID,
+  CATEGORY_COLLECTION_ID,
+  BOOKS_COLLECTION_ID,
+} from "../../appwrite/appwrite";
 import { invalidateToken } from "../../helpers/helper";
-import {Request, Response, } from 'express'
+import { NextFunction, Request, Response } from "express";
 
-async function clientAppwritePOST(req:Request, res:Response) {
+async function clientAppwritePOST(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     /**
      * Verifies the user's token using the invalidateToken helper function to ensure authentication.
      */
-    const verifiedToken = await invalidateToken({ req, res });
+    const verifiedToken = await invalidateToken(req, res, next);
     const { slug } = req.body;
 
     switch (slug) {
@@ -102,7 +114,6 @@ async function clientAppwritePOST(req:Request, res:Response) {
           PUBLICLY_SHARED_BLOGS_COLLECTION_ID,
           document_id,
           {
-
             // @ts-ignore
             user_id: verifiedToken.sub,
             user_name,
@@ -146,7 +157,6 @@ async function clientAppwritePOST(req:Request, res:Response) {
         const accessJSON = JSON.parse(response.access);
         const accessArray = Object.entries(accessJSON).flatMap(
           ([category, actions]) =>
-
             // @ts-ignore
             Object.entries(actions).map(([key, value]) => ({
               category,
@@ -187,18 +197,18 @@ async function clientAppwritePOST(req:Request, res:Response) {
         }
 
         const doc = await databases.getDocument(
-          DATABASE_ID, BLOGS_COLLECTION_ID, id, 
-        )
-
-        await databases.updateDocument(DATABASE_ID, BLOGS_COLLECTION_ID, id, 
-    {
-      blog_markdown: doc.blog_markdown,
-      user_id: doc.user_id,
-      blog_image: doc.blog_image,
-      isRead: true,
-      books: doc.books.$id
-    }
+          DATABASE_ID,
+          BLOGS_COLLECTION_ID,
+          id
         );
+
+        await databases.updateDocument(DATABASE_ID, BLOGS_COLLECTION_ID, id, {
+          blog_markdown: doc.blog_markdown,
+          user_id: doc.user_id,
+          blog_image: doc.blog_image,
+          isRead: true,
+          books: doc.books.$id,
+        });
         res.status(200).json({ res: null });
         break;
       }
@@ -218,4 +228,4 @@ async function clientAppwritePOST(req:Request, res:Response) {
   }
 }
 
-export  { clientAppwritePOST };
+export { clientAppwritePOST };

@@ -12,15 +12,15 @@ import {
   CATEGORY_COLLECTION_ID,
 } from "../../appwrite/appwrite";
 import { invalidateToken } from "../../helpers/helper";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
-async function clientAppwriteGET(req: Request, res: Response) {
+async function clientAppwriteGET(req: Request, res: Response, next: NextFunction) {
   try {
     console.log(req.query.slug);
     /**
      * Verifies the user's token using the invalidateToken helper function to ensure authentication.
      */
-    const verifiedToken = await invalidateToken({ req, res });
+    const verifiedToken = await invalidateToken(req, res, next);
 
     const slug = req.query.slug;
 
@@ -202,7 +202,11 @@ async function clientAppwriteGET(req: Request, res: Response) {
 curl -X GET \
   'http://localhost:3000/public-client-appwrite-get?slug=GET_GET_PUBLICLY_SHARED_BLOG_WITH_ID&id=6756d4000039949c064d'
 */
-async function publicClientAppwriteGET(req: Request, res: Response) {
+async function publicClientAppwriteGET(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
   try {
     console.log(req.query.slug);
     const slug = req.query.slug;
