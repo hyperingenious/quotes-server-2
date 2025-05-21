@@ -21,7 +21,7 @@ import { add_deletion_entry } from "../appwrite/add/add_appwrite";
  * Imports the function for invalidating and verifying user tokens.
  */
 import { invalidateToken } from "../helpers/helper";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 /**
  * Extracts the file ID from a given URL.
@@ -38,12 +38,12 @@ function extractFileId(url: string): string | null {
  * @param {object} req - The request object.
  * @param {object} res - The response object.
  */
-async function deleteContent(req: Request, res: Response) {
+async function deleteContent(req: Request, res: Response, next: NextFunction) {
   try {
     /**
      * Verifies the user's token using the invalidateToken helper function.
      */
-    const verifiedToken = await invalidateToken({ req, res });
+    const verifiedToken = await invalidateToken( req, res ,next);
     console.log("Fetching document and associated IDs...");
 
     /**

@@ -75,8 +75,7 @@ async function uploadPDFRouteNew(req: Request, res: Response) {
       res
         .status(500)
         .json({ message: "Failed to save book entry in database" });
-        return;
-    }
+        return; }
 
     res
       .status(200)

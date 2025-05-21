@@ -48,8 +48,8 @@ const upload = multer({ storage: storage });
  * @param {object} req - The request object.
  * @param {object} res - The response object.
  */
-import { Request, Response } from "express";
-async function handleUpload(req: Request, res: Response) {
+import { NextFunction, Request, Response } from "express";
+async function handleUpload(req: Request, res: Response, next: NextFunction) {
   try {
     // Check if a file was uploaded
     if (!req.file) {
@@ -90,7 +90,7 @@ async function handleUpload(req: Request, res: Response) {
       });
     }
 
-   const verifiedToken = await invalidateToken({ req, res });
+   const verifiedToken = await invalidateToken( req, res ,next);
     const {
       authorName: author,
       bookTitle: book_name,
