@@ -6,6 +6,7 @@ import {
   CHUNKS_COLLECTION_ID,
   BLOGS_COLLECTION_ID,
   storage,
+  BUCKET_ID,
 } from "../appwrite";
 import {
   DeleteBlogEntryByIdAndToken,
@@ -18,10 +19,10 @@ import {
 import {
   get_all_chunk_ids_with_book_id,
   get_all_blog_ids_match_book_id,
-}  from "../get/get_appwrite";
-import { add_deletion_entry }  from "../add/add_appwrite";
-import { verify_token }  from "../verify/verify_appwrite";
-import { list_all_book_ids_with_user_id }  from "../list/list_appwrite";
+} from "../get/get_appwrite";
+import { add_deletion_entry } from "../add/add_appwrite";
+import { verify_token } from "../verify/verify_appwrite";
+import { list_all_book_ids_with_user_id } from "../list/list_appwrite";
 
 async function delete_chunk_by_id(el: string): Promise<void> {
   console.log(`Deleting chunk by ID: ${el}`);
@@ -57,7 +58,7 @@ async function delete_book_entry_by_id({
   }
 }
 
-async function delete_file_by_id(el: string): Promise<null> {
+async function delete_file_by_id(el: string): Promise<null | void> {
   console.log(`Deleting file by ID: ${el}`);
   try {
     await storage.deleteFile(BUCKET_ID, el);
@@ -158,7 +159,9 @@ async function delete_everything({ token }: DeleteEverything) {
   try {
     const response = await verify_token({ token });
     if (!response) throw Error("Invalid Token");
-    const documents = await list_all_book_ids_with_user_id(response[0].user_id);
+    const documents = await list_all_book_ids_with_user_id(
+      response.related_data ? response.related_data[0].user_id : ""
+    );
 
     if (documents && documents.length !== 0) {
       console.log(`Deleting ${documents.length} books.`);
@@ -174,7 +177,7 @@ async function delete_everything({ token }: DeleteEverything) {
   }
 }
 
-export   {
+export {
   delete_chunk_by_id,
   delete_blog_by_id,
   delete_book_entry_by_id,
