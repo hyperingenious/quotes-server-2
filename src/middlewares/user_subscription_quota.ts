@@ -73,26 +73,32 @@ const userSubscriptionQuota = async (
             subscriptionQuota.allocated_blog_quota <
             subscriptionQuota.blogs_generated
           ) {
-            return res.status(403).json({
+            res.status(403).json({
               message: "You ran our of your monthly subscription limit",
             });
+
+            return 
           }
         } catch (quotaError) {
           console.error("Error fetching subscription quota:", quotaError);
-          return res
+          res
             .status(500)
             .json({ error: "Internal Server Error fetching quota" });
+
+          return 
         }
         break;
       }
     }
 
-    return res
+    res
       .status(404)
       .json({ error: "Not Found", message: "Subscription Not found" });
+    return 
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Internal Server Error" });
+    return 
   }
 }
 export { userSubscriptionQuota };

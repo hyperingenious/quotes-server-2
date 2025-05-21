@@ -7,7 +7,7 @@ async function invalidateJwt(
   next: NextFunction
 ): Promise<void> {
   try {
-    const verifiedToken = await invalidateToken({ req, res });
+    const verifiedToken = await invalidateToken( req, res ,next);
     // @ts-ignore
     req.verifiedToken = verifiedToken;
     next();
