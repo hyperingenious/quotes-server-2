@@ -100,10 +100,7 @@ async function get_all_books({
 }: GetAllBooks): Promise<Models.Document[]> {
   console.log(`Getting all books for token: ${token}`);
   try {
-    const {
-      isTokenValid,
-      related_data: [related_data],
-    } = await verify_token({ token });
+    const { isTokenValid, related_data } = await verify_token({ token });
 
     if (!isTokenValid) {
       throw new Error("Invalid Token");
@@ -111,7 +108,7 @@ async function get_all_books({
     const { documents } = await databases.listDocuments(
       DATABASE_ID,
       BOOKS_COLLECTION_ID,
-      [Query.equal("user_id", [related_data.user_id])]
+      [Query.equal("user_id", [related_data?related_data[0].user_id:''])]
     );
 
     console.log("Books retrieved successfully:");
@@ -222,9 +219,11 @@ async function get_images_with_keywords_match({
   } catch (error: unknown) {
     console.error(error);
     if (error instanceof Error) {
-      throw new Error(`Failed to get image keyword documents: ${error.message}`);
+      throw new Error(
+        `Failed to get image keyword documents: ${error.message}`
+      );
     }
-    throw new Error('Failed to get image keyword documents: Unknown error');
+    throw new Error("Failed to get image keyword documents: Unknown error");
   }
 }
 
