@@ -17,7 +17,10 @@ async function list_all_blogs({ token, book_id }: ListAllBlogs) {
       DATABASE_ID,
       BLOGS_COLLECTION_ID,
       [
-        sdk.Query.equal("user_id", response[0].user_id),
+        sdk.Query.equal(
+          "user_id",
+          response.related_data ? response.related_data[0].user_id : ""
+        ),
         sdk.Query.equal("books", book_id),
       ]
     );
