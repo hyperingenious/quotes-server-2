@@ -1,5 +1,6 @@
 import { DATABASE_ID, TOKENISATION_COLLECTION_ID, databases }  from "../appwrite";
 import {Query}from "node-appwrite";
+import { VerifyToken } from "./verify_appwrite_interface";
 
 async function verify_token({ token }:VerifyToken) {
     console.log(`Verifying token: ${token}`);
